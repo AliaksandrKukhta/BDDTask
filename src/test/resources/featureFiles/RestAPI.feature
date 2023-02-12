@@ -1,6 +1,6 @@
 Feature: Weather
 
-  Scenario Outline: Get weather for cities
+  Scenario Outline: Check weather forecast for cities
     Given Request current weather for city "<city>"
     Then Response is <statusCode>
     Examples:
@@ -11,7 +11,7 @@ Feature: Weather
     | Berlin | 200       |
 
 
-  Scenario Outline: Get information for cities
+  Scenario Outline: Check weather information for cities
     Given Request current weather for city "<city>"
     Then Information are "<language>", "<name>", "<region>", "<country>"
     Examples:
@@ -22,28 +22,28 @@ Feature: Weather
       | Berlin | eng      | Berlin| Berlin                        | Germany       |
 
 
-  Scenario Outline: Negative scenario without Access key
+  Scenario Outline: Check weather negative scenario without Access key
     Given Request negative for city "<city>" without Access key
     Then Error Response is <statusCode>
     Examples:
       | city   | statusCode|
       | Minsk  | 101       |
 
-  Scenario Outline: Negative scenario with double query
+  Scenario Outline: Check weather negative scenario with double query
     Given Request negative for city "<city>" with double query
     Then Error Response is <statusCode>
     Examples:
       | city   | statusCode|
       | Minsk  | 601       |
-
-  Scenario Outline: Negative scenario with bad query
+#
+  Scenario Outline: Check weather negative scenario with bad query
     Given Request current weather for city "<city>"
     Then Error Response is <statusCode>
     Examples:
       | city             | statusCode|
       | MinskMinskMinsk  | 615       |
 
-  Scenario Outline: Negative scenario with bad URL
+  Scenario Outline: Check weather negative scenario with bad URL
     Given Request negative for city "<city>" with bad URL
     Then Error Response is <statusCode>
     Examples:

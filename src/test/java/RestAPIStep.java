@@ -4,8 +4,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import responsePojo.ErrorRoot;
 import responsePojo.Root;
@@ -29,7 +27,7 @@ public class RestAPIStep {
     }
 
     @Given("Request current weather for city {string}")
-    public void requestCurrentWeatherForCity(String city) {
+    public void getCurrentWeatherForCityResponse(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
             response = given().spec(ipAPIRequestSpecification())
@@ -41,7 +39,7 @@ public class RestAPIStep {
     }
 
     @Given("Request negative for city {string} without Access key")
-    public void requestNegativeForCityWithoutAccessKey(String city) {
+    public void getNegativeWeatherForCityResponseWithoutAccessKey(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
             response = given().spec(ipAPIRequestSpecification())
@@ -53,7 +51,7 @@ public class RestAPIStep {
     }
 
     @Given("Request negative for city {string} with double query")
-    public void requestNegativeForCityWithDoubleQuery(String city) {
+    public void getNegativeWeatherForCityResponseWithDoubleQuery(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
             response = given().spec(ipAPIRequestSpecification())
@@ -65,7 +63,7 @@ public class RestAPIStep {
     }
 
     @Given("Request negative for city {string} with bad URL")
-    public void requestNegativeForCityWithBadURL(String city) {
+    public void getNegativeWeatherForCityResponseWithBadURL(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "bad_URL");
             response = given().spec(ipAPIRequestSpecification())
@@ -79,8 +77,9 @@ public class RestAPIStep {
     @Then("Error Response is {int}")
     public void errorResponseIs(int statusCode) {
         ErrorRoot errorRoot = response.then().extract().body().as(ErrorRoot.class);
-        int actualResponseCode = errorRoot.error.code;
-        assertEquals(statusCode, actualResponseCode);
+        int actualResponseStatusCode = errorRoot.error.getCode();
+        assertEquals("Expected statusCode " + statusCode + " not Equals actual statusCode " +
+                actualResponseStatusCode, statusCode, actualResponseStatusCode);
     }
 
     @Then("Information are {string}, {string}, {string}, {string}")
@@ -98,7 +97,8 @@ public class RestAPIStep {
 
     @Then("Response is {int}")
     public void responseIsStatusCode(int statusCode) {
-        int actualResponseCode = response.then().extract().statusCode();
-        assertEquals(statusCode, actualResponseCode);
+        int actualResponseStatusCode = response.then().extract().statusCode();
+        assertEquals("Expected statusCode " + statusCode + " not Equals actual statusCode " +
+                actualResponseStatusCode, statusCode, actualResponseStatusCode);
     }
 }
