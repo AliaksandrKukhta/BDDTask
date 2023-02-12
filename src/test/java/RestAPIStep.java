@@ -5,15 +5,15 @@ import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
-import responsePojo.ErrorRoot;
-import responsePojo.Root;
+import responseDTO.ErrorRoot;
+import responseDTO.Root;
 import utils.ReadProperty;
 
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
-import static specifications.APIRequestSpecification.ipAPIRequestSpecification;
+import static specifications.APIRequestSpecification.aPIRequestSpecification;
 
 public class RestAPIStep {
     ReadProperty readProperty = new ReadProperty();
@@ -30,7 +30,7 @@ public class RestAPIStep {
     public void getCurrentWeatherForCityResponse(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
-            response = given().spec(ipAPIRequestSpecification())
+            response = given().spec(aPIRequestSpecification())
                     .when()
                     .get(RestAssured.baseURI + readProperty.getPropertyValue("key", "access_key") + "&query=" + city);
         } catch (IOException e) {
@@ -42,7 +42,7 @@ public class RestAPIStep {
     public void getNegativeWeatherForCityResponseWithoutAccessKey(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
-            response = given().spec(ipAPIRequestSpecification())
+            response = given().spec(aPIRequestSpecification())
                     .when()
                     .get(RestAssured.baseURI + "&query=" + city);
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class RestAPIStep {
     public void getNegativeWeatherForCityResponseWithDoubleQuery(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "base_URL");
-            response = given().spec(ipAPIRequestSpecification())
+            response = given().spec(aPIRequestSpecification())
                     .when()
                     .get(RestAssured.baseURI + readProperty.getPropertyValue("key", "access_key") + "&query=" + city + "&query=");
         } catch (IOException e) {
@@ -66,7 +66,7 @@ public class RestAPIStep {
     public void getNegativeWeatherForCityResponseWithBadURL(String city) {
         try {
             RestAssured.baseURI = readProperty.getPropertyValue("local", "bad_URL");
-            response = given().spec(ipAPIRequestSpecification())
+            response = given().spec(aPIRequestSpecification())
                     .when()
                     .get(RestAssured.baseURI + readProperty.getPropertyValue("key", "access_key") + "&query=" + city);
         } catch (IOException e) {
